@@ -1,6 +1,7 @@
 from src.extract.world_bank_extractor import WorldBankExtractor
 from src.transform.raw_to_silver import RawToSilverTransformer
 from src.transform.silver_to_gold import SilverToGoldTransformer
+from src.load.load_to_database import DatabaseLoader
 
 
 def main():
@@ -12,6 +13,9 @@ def main():
 
     silver_to_gold = SilverToGoldTransformer()
     silver_to_gold.run()
+
+    database_loader = DatabaseLoader()
+    database_loader.run()
 
 
 if __name__ == "__main__":
