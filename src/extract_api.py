@@ -75,7 +75,6 @@ def extract_usuarios() -> pd.DataFrame:
 
     return df
 
-
 def extract_posts() -> pd.DataFrame:
     
     """
