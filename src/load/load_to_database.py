@@ -11,6 +11,7 @@ class DatabaseLoader:
 
         self.silver_file = SILVER_DIR / "world_bank_indicators.csv"
         self.gold_file = GOLD_DIR / "country_summary.csv"
+        self.risk_score_file = GOLD_DIR / "economic_risk_score.csv"
 
     def create_tables(self) -> None:
         self.database.execute_script(self.create_tables_sql)
@@ -53,4 +54,21 @@ class DatabaseLoader:
         print("Carregando camada Gold no SQLite...")
         self.load_gold()
 
+        print("Carregando score de risco econômico no SQLite...")
+        self.load_risk_score()
+
         print("Banco de dados criado e carregado com sucesso.")
+
+    def load_risk_score(self) -> None:
+        if not self.risk_score_file.exists():
+            raise FileNotFoundError("Arquivo de score econômico não encontrado.")
+
+        df = pd.read_csv(self.risk_score_file)
+
+        with self.database.connect() as connection:
+            df.to_sql(
+                "gold_economic_risk_score",
+                connection,
+                if_exists="replace",
+                index=False
+            )

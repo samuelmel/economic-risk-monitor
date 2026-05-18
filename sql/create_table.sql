@@ -20,3 +20,20 @@ CREATE TABLE IF NOT EXISTS gold_world_bank_indicators (
     unemployment_percent REAL,
     population_total REAL
 );
+
+
+DROP TABLE IF EXISTS gold_economic_risk_score;
+
+CREATE TABLE gold_economic_risk_score (
+    country_code TEXT NOT NULL,
+    country_name TEXT NOT NULL,
+    year INTEGER NOT NULL,
+    inflation_percent REAL,
+    unemployment_percent REAL,
+    gdp_growth_percent REAL,
+    inflation_score REAL,
+    unemployment_score REAL,
+    gdp_growth_score REAL,
+    final_risk_score REAL,
+    risk_level TEXT
+);
