@@ -2,8 +2,8 @@ from datetime import datetime, timedelta
 from pathlib import Path
 
 from airflow import DAG
-from airflow.operators import EmptyOperator
-from airflow.operators import PythonOperator
+from airflow.providers.standard.operators.empty import EmptyOperator
+from airflow.providers.standard.operators.python import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 
 
@@ -70,7 +70,7 @@ with DAG (
     dag_id="etl_silver_transform",
     default_args=default_args,
     description="DAG responsável por transformar dados da camada RAW para a camada SILVER.",
-    schedule_interval="30 6 * * *",
+    schedule="30 6 * * *",
     start_date=datetime(2024, 1, 1),
     catchup=False,
     max_active_runs=1,

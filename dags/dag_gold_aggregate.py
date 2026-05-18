@@ -2,8 +2,8 @@ from datetime import datetime, timedelta
 from pathlib import Path
 
 from airflow import DAG
-from airflow.operators import EmptyOperator
-from airflow.operators import PythonOperator
+from airflow.providers.standard.operators.empty import EmptyOperator
+from airflow.providers.standard.operators.python import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 
 
@@ -50,7 +50,7 @@ with DAG(
     dag_id="etl_gold_aggregate",
     default_args=default_args,
     description="DAG responsável por criar métricas agregadas na camada GOLD.",
-    schedule_interval="0 7 * * *",
+    schedule="0 7 * * *",
     start_date=datetime(2024, 1, 1),
     catchup=False,
     max_active_runs=1,
