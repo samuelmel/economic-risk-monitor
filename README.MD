@@ -1,203 +1,113 @@
-economic-risk-monitor/
-│
-├── 📄 README.md                          # Documentação principal
-├── 📄 requirements.txt                   # Dependências Python
-├── 📄 .gitignore                         # Arquivos ignorados pelo Git
-├── 📄 config.py                          # Configurações centralizadas
-├── 📄 main.py                            # Script principal de execução
-│
-├── 📂 data/                              # Dados do projeto
-│   │
-│   ├── 📂 raw/                           # Camada RAW (dados brutos)
-│   │   └── 📂 world_bank/                # JSONs originais da API
-│   │       ├── gdp_BR_2023.json
-│   │       ├── inflation_US_2023.json
-│   │       └── ...
-│   │
-│   ├── 📂 silver/                        # Camada SILVER (dados limpos)
-│   │   └── 📂 world_bank/                # CSVs/Parquets limpos
-│   │       ├── indicators_cleaned.csv
-│   │       └── indicators_cleaned.parquet
-│   │
-│   ├── 📂 gold/                          # Camada GOLD (dados analíticos)
-│   │   ├── country_summary.csv
-│   │   ├── economic_risk_score.csv
-│   │   └── aggregated_metrics.parquet
-│   │
-│   └── 📂 database/                      # Banco de dados SQLite
-│       └── economic_risk.db
-│
-├── 📂 src/                               # Código fonte
-│   │
-│   ├── 📂 extract/                       # Camada de Extração
-│   │   └── world_bank_extractor.py       # Classe para extrair da API
-│   │
-│   ├── 📂 transform/                     # Camada de Transformação
-│   │   ├── silver_transformer.py         # Raw → Silver
-│   │   └── gold_transformer.py           # Silver → Gold
-│   │
-│   ├── 📂 load/                          # Camada de Carga
-│   │   └── database_loader.py            # Carrega dados no SQLite
-│   │
-│   ├── 📂 analysis/                      # Análises e Scores
-│   │   └── risk_calculator.py            # Calcula score de risco
-│   │
-│   ├── 📂 quality/                       # Validação de Qualidade
-│   │   └── data_validator.py             # Valida qualidade dos dados
-│   │
-│   └── 📂 utils/                         # Utilitários
-│       ├── logger.py                     # Sistema de logging
-│       └── database.py                   # Conexão e operações DB
-│
-├── 📂 sql/                               # Scripts SQL
-│   ├── create_tables.sql                 # Criação de tabelas
-│   ├── queries_silver.sql                # Queries camada Silver
-│   └── queries_gold.sql                  # Queries camada Gold
-│
-├── 📂 dashboards/                        # Dashboards Streamlit
-│   └── economic_dashboard.py             # Dashboard principal
-│
-├── 📂 tests/                             # Testes unitários
-│   ├── test_extractor.py
-│   ├── test_transformer.py
-│   └── test_risk_calculator.py
-│
-└── 📂 logs/                              # Logs de execução
-    └── economic_risk_20240518.log
+# economic-risk-monitor
 
+Projeto de ETL para dados econômicos da World Bank com arquitetura em camadas RAW → SILVER → GOLD.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📋 DESCRIÇÃO DOS COMPONENTES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## Visão Geral
 
-┌─────────────────────────────────────────────────────┐
-│ ARQUIVOS RAIZ                                       │
-└─────────────────────────────────────────────────────┘
+Este repositório organiza coleta, limpeza, transformação e análise de indicadores econômicos usando:
+- `src/extract/` para extração de dados da API
+- `src/transform/` para processamento em camadas
+- `src/load/` para carga em banco SQLite
+- `src/analysis/` para cálculo de score de risco
+- `dashboards/` para visualização com Streamlit
 
-config.py                 → Configurações (países, indicadores, URLs)
-main.py                   → Orquestra todo o pipeline (Extract → Transform → Load)
-requirements.txt          → Lista de dependências
+## Estrutura do Projeto
 
+- `data/`
+  - `raw/` — dados brutos importados da API
+  - `silver/` — dados limpos e padronizados
+  - `gold/` — dados analíticos preparados para BI
+  - `database/` — banco SQLite utilizado pelo projeto
+- `src/`
+  - `extract/` — lógica de extração da API World Bank
+  - `transform/` — transformações para as camadas SILVER e GOLD
+  - `load/` — carregamento de dados no banco de dados
+  - `analysis/` — cálculo de scores e métricas
+  - `quality/` — validação de qualidade dos dados
+  - `utils/` — utilitários de banco e logging
+- `sql/` — scripts SQL de criação e consultas
+- `dashboards/` — dashboard Streamlit
+- `tests/` — testes unitários
+- `logs/` — logs de execução
 
-┌─────────────────────────────────────────────────────┐
-│ src/extract/                                        │
-└─────────────────────────────────────────────────────┘
+## Componentes Principais
 
-world_bank_extractor.py   → Classe WorldBankExtractor
-                            • Busca dados da API
-                            • Salva JSON bruto em data/raw/
+### `src/extract/`
+- `world_bank_extractor.py`
+  - Busca dados da API do World Bank
+  - Gera arquivos JSON brutos em `data/raw/`
 
+### `src/transform/`
+- `silver_transformer.py`
+  - Limpa dados brutos
+  - Remove nulos e duplicados
+  - Padroniza colunas e formatos
+- `gold_transformer.py`
+  - Agrega dados em métricas analíticas
+  - Prepara tabelas para BI
 
-┌─────────────────────────────────────────────────────┐
-│ src/transform/                                      │
-└─────────────────────────────────────────────────────┘
+### `src/load/`
+- `database_loader.py`
+  - Cria e popula tabelas SQLite
+  - Gerencia transações de carga
 
-silver_transformer.py     → Classe SilverTransformer
-                            • Limpa dados raw
-                            • Remove nulos/duplicados
-                            • Padroniza colunas
-                            
-gold_transformer.py       → Classe GoldTransformer
-                            • Cria tabelas analíticas
-                            • Agrega por país/ano
-                            • Prepara dados para BI
+### `src/analysis/`
+- `risk_calculator.py`
+  - Calcula score de risco econômico
+  - Classifica como low / medium / high
+  - Utiliza inflação, desemprego e PIB
 
+### `src/quality/`
+- `data_validator.py`
+  - Valida schema dos dados
+  - Checa nulos e duplicados
+  - Garante consistência de qualidade
 
-┌─────────────────────────────────────────────────────┐
-│ src/load/                                           │
-└─────────────────────────────────────────────────────┘
+### `src/utils/`
+- `logger.py` — logging centralizado
+- `database.py` — helpers de conexão SQLite
 
-database_loader.py        → Classe DatabaseLoader
-                            • Cria tabelas SQLite
-                            • Insere dados nas camadas
-                            • Gerencia transações
+### `sql/`
+- `create_tables.sql` — criação de tabelas
+- `queries_silver.sql` — consultas da camada SILVER
+- `queries_gold.sql` — consultas da camada GOLD
 
+### `dashboards/`
+- `economic_dashboard.py` — dashboard interativo para análise
 
-┌─────────────────────────────────────────────────────┐
-│ src/analysis/                                       │
-└─────────────────────────────────────────────────────┘
+## Arquitetura MEDALLION
 
-risk_calculator.py        → Classe RiskCalculator
-                            • Calcula score de risco
-                            • Classifica (low/medium/high)
-                            • Usa inflação + desemprego + PIB
+A arquitetura adotada segue o padrão RAW → SILVER → GOLD:
 
+### RAW
+- Dados originais em formato JSON
+- Mantém informação bruta sem modificações
+- Localização: `data/raw/`
 
-┌─────────────────────────────────────────────────────┐
-│ src/quality/                                        │
-└─────────────────────────────────────────────────────┘
+### SILVER
+- Dados limpos e padronizados
+- Remove inconsistências, nulos e duplicações
+- Localização: `data/silver/`
 
-data_validator.py         → Classe DataValidator
-                            • Valida schema
-                            • Checa nulos/duplicados
-                            • Garante consistência
+### GOLD
+- Dados agregados para análise
+- Métricas calculadas e prontas para BI
+- Localização: `data/gold/`
 
+## Uso
 
-┌─────────────────────────────────────────────────────┐
-│ src/utils/                                          │
-└─────────────────────────────────────────────────────┘
+- Rodar testes:
+  ```bash
+  pytest tests/
+  ```
+- Abrir dashboard Streamlit:
+  ```bash
+  streamlit run dashboards/economic_dashboard.py
+  ```
 
-logger.py                 → Sistema de logging
-database.py               → Conexão e helpers SQLite
+## Observação
 
-
-┌─────────────────────────────────────────────────────┐
-│ sql/                                                │
-└─────────────────────────────────────────────────────┘
-
-create_tables.sql         → DDL das 4 tabelas:
-                            • raw_world_bank_responses
-                            • silver_world_bank_indicators
-                            • gold_country_summary
-                            • gold_economic_risk_score
-
-
-┌─────────────────────────────────────────────────────┐
-│ dashboards/                                         │
-└─────────────────────────────────────────────────────┘
-
-economic_dashboard.py     → Dashboard Streamlit:
-                            • Filtro por país
-                            • Gráficos temporais (Plotly)
-                            • Métricas econômicas
-                            • Tabela analítica
-
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🏗️ ARQUITETURA MEDALHÃO (MEDALLION ARCHITECTURE)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Este projeto usa a arquitetura em camadas RAW → SILVER → GOLD:
-
-┌─────────────────────────────────────────────────────┐
-│ 🥉 RAW (Bronze) - Dados Brutos                      │
-├─────────────────────────────────────────────────────┤
-│ • Armazena dados exatamente como vieram da fonte    │
-│ • Formato original (JSON da API)                    │
-│ • Imutável - nunca é alterado                       │
-│ • Permite reprocessamento completo                  │
-│ • Localização: data/raw/                            │
-│ • Banco: raw_world_bank_responses                   │
-└─────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────┐
-│ 🥈 SILVER - Dados Limpos                            │
-├─────────────────────────────────────────────────────┤
-│ • Dados validados e limpos                          │
-│ • Tipos padronizados                                │
-│ • Sem nulos/duplicados                              │
-│ • Formato: CSV/Parquet                              │
-│ • Localização: data/silver/                         │
-│ • Banco: silver_world_bank_indicators               │
-└─────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────┐
-│ 🥇 GOLD - Dados Analíticos                          │
-├─────────────────────────────────────────────────────┤
-│ • Agregado e otimizado para análise                 │
-│ • Métricas de negócio calculadas                    │
-│ • Pronto para dashboards e BI                       │
-│ • Formato: CSV/Parquet otimizado                    │
+O repositório atual não inclui `requirements.txt` ou `main.py` no diretório raiz. Ajuste as dependências e os pontos de entrada conforme for necessário ao seu ambiente.
 │ • Localização: data/gold/                           │
 │ • Banco: gold_country_summary, gold_risk_score      │
 └─────────────────────────────────────────────────────┘
