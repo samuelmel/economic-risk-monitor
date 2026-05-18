@@ -1,8 +1,11 @@
-insert into gold_metricas (
-    user_id, 
-    nome_completo, 
-    email, 
-    cidade, 
+INSERT INTO gold_metricas_usuario (
+    user_id,
+    nome_usuario,
+    cidade,
+    empresa,
+    total_posts,
+    media_palavras_titulo,
+    primeiro_post_titulo,
     dt_processamento
 )
 
