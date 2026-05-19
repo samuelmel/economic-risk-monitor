@@ -130,6 +130,13 @@ O dashboard Streamlit oferece:
 - 📋 Tabela analítica com todos os dados
 - 🎯 Classificação de risco (Low / Medium / High)
 
+### Print do Dashboard
+
+Capturas atuais do dashboard:
+
+![Preview do Dashboard 1](img/monitor.png)
+![Preview do Dashboard 2](img/indicadoreseconomicos.png)
+
 ---
 
 ## 🎲 Cálculo do Risk Score
