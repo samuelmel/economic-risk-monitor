@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS silver_world_bank_indicators (
     source_file TEXT
 );
 
-CREATE TABLE IF NOT EXISTS gold_world_bank_indicators (
+CREATE TABLE IF NOT EXISTS gold_country_summary (
     id inTEGER PRIMARY KEY AUTOINCREMENT,
     country_code TEXT NOT NULL,
     country_name TEXT NOT NULL,

@@ -189,15 +189,15 @@ Scripts SQL disponíveis em `/sql/`:
 
 ```python
 from src.extract.world_bank_extractor import WorldBankExtractor
-from src.transform.silver_transformer import SilverTransformer
+from src.transform.raw_to_silver import RawToSilverTransformer
 
 # Extrair dados
 extractor = WorldBankExtractor()
-extractor.extract_all_indicators()
+extractor.extract_all()
 
 # Transformar para Silver
-transformer = SilverTransformer()
-transformer.process_raw_to_silver()
+transformer = RawToSilverTransformer()
+transformer.run()
 ```
 
 ---
