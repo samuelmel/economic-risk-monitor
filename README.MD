@@ -29,31 +29,50 @@ World Bank API  →  RAW (Bronze)  →  SILVER  →  GOLD  →  Dashboard
 
 ## 📁 Estrutura do Projeto
 
-```
-economic-risk-monitor/
+```text
+worldbank-api/
 │
 ├── data/
-│   ├── raw/          # JSONs originais da API
-│   ├── silver/       # CSVs limpos e validados
-│   ├── gold/         # CSVs analíticos agregados
-│   └── database/     # SQLite com todas as camadas
+│   ├── raw/
+│   │   └── world_bank/              # JSONs brutos extraídos da API
+│   ├── silver/
+│   │   └── world_bank_indicators.csv
+│   ├── gold/
+│   │   ├── country_summary.csv
+│   │   └── economic_risk_score.csv
+│   └── database/
+│       └── economic_risk.db
 │
+├── dashboards/
+│   └── economic_dashboard.py        # Dashboard Streamlit
+├── img/
+│   ├── monitor.png                  # Print do dashboard
+│   └── indicadoreseconomicos.png    # Print dos indicadores
+├── logs/
+├── sql/
+│   └── create_table.sql             # Criação das tabelas SQLite
 ├── src/
-│   ├── extract/      # Extração da World Bank API
-│   ├── transform/    # Transformações Silver e Gold
-│   ├── load/         # Carga no banco SQLite
-│   ├── analysis/     # Cálculo de score de risco
-│   ├── quality/      # Validação de qualidade
-│   └── utils/        # Logging e helpers de banco
-│
-├── sql/              # Scripts SQL (DDL e queries)
-├── dashboards/       # Dashboard Streamlit
-├── tests/            # Testes unitários
-├── logs/             # Logs de execução
-│
-├── config.py         # Configurações centralizadas
-├── main.py           # Script principal do pipeline
-└── requirements.txt  # Dependências Python
+│   ├── analysis/
+│   │   └── risk_calculator.py
+│   ├── extract/
+│   │   └── world_bank_extractor.py
+│   ├── load/
+│   │   ├── database.py
+│   │   └── load_to_database.py
+│   └── transform/
+│       ├── raw_to_silver.py
+│       └── silver_to_gold.py
+├── tests/
+│   ├── conftest.py
+│   ├── test.quality.py
+│   ├── test_extractor.py
+│   ├── test_risk_calculator.py
+│   └── test_transformer.py
+├── .gitignore
+├── config.py
+├── main.py
+├── README.MD
+└── requirements.txt
 ```
 
 ---
